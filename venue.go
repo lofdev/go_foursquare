@@ -47,12 +47,6 @@ type Venue struct {
 	// There is a bunch more to add
 }
 
-// ResponseMeta is the metadata for the Foursquare response
-type ResponseMeta struct {
-	Code      int64  `json:"code"`
-	RequestID string `json:"requestId"`
-}
-
 // VenuesResponseBody is a bullshit wrapper around the venues data
 type VenuesResponseBody struct {
 	Venues []Venue `json:"venues"`

@@ -13,6 +13,12 @@ type appSecret struct {
 	secret   string
 }
 
+// ResponseMeta is the metadata for the Foursquare response
+type ResponseMeta struct {
+	Code      int64  `json:"code"`
+	RequestID string `json:"requestId"`
+}
+
 // UserlessAPI returns a container for doing userless API requests
 type UserlessAPI struct {
 	credentials appSecret
