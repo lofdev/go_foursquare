@@ -2,6 +2,7 @@ package foursquare
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -67,6 +68,16 @@ func (api *UserlessAPI) VenuesSearch(query string, lat float64, lng float64) (re
 	return v.Response.Venues
 }
 
+// VenuesCategorySearch requests the /venues/search GET endpoint of Foursquare's API
+func (api *UserlessAPI) VenuesCategorySearch(category string, lat float64, lng float64) (result []Venue) {
+	fmt.Println(api.venuesCategorySearchURL(category, lat, lng))
+	requestURL := api.venuesCategorySearchURL(category, lat, lng)
+	res, _ := http.Get(requestURL)
+	var v VenuesResponse
+	json.NewDecoder(res.Body).Decode(&v)
+	return v.Response.Venues
+}
+
 //  Create a URL for requesting /venues/search
 func (api *UserlessAPI) venuesSearchURL(query string, lat float64, lng float64) (result string) {
 	return baseURL + "venues/search?limit=50&intent=browse&ll=" +
@@ -78,4 +89,16 @@ func (api *UserlessAPI) venuesSearchURL(query string, lat float64, lng float64) 
 		"v=" + apiDate + "&" +
 		"m=" + method + "&" +
 		"query=" + query
+}
+
+func (api *UserlessAPI) venuesCategorySearchURL(category string, lat float64, lng float64) (result string) {
+	return baseURL + "venues/search?limit=50&intent=browse&ll=" +
+		strconv.FormatFloat(lat, 'f', -1, 64) + "," +
+		strconv.FormatFloat(lng, 'f', -1, 64) + "&" +
+		"radius=1000&" +
+		"client_id=" + api.credentials.clientID + "&" +
+		"client_secret=" + api.credentials.secret + "&" +
+		"v=" + apiDate + "&" +
+		"m=" + method + "&" +
+		"categoryId=" + category
 }
